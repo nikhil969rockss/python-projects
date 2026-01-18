@@ -1,6 +1,10 @@
 # This is how to use function in the todo app
 
 import functions
+import time
+
+now =  time.strftime("%d-%b-%Y, %A, %I:%M:%S %p")
+print("Today-",now)
 
 
 # print(help(get_todos))
