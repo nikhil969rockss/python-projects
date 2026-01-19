@@ -360,19 +360,19 @@ while True :
 
         # using with context manger
 
-        with open("todos.txt", "r") as file :
+        with open("../todos.txt", "r") as file :
             existing_todos = file.readlines()
 
 
         existing_todos.append(todo+ "\n")
 
-        with open("todos.txt", "w") as file :
+        with open("../todos.txt", "w") as file :
             file.writelines(existing_todos)
 
 
     elif user_input.startswith("show") :
 
-        with open("todos.txt", "r") as file :
+        with open("../todos.txt", "r") as file :
             todos = file.readlines()
 
         # method -1
@@ -396,7 +396,7 @@ while True :
 
     elif user_input.startswith("edit"):
 
-        with open("todos.txt", "r") as file :
+        with open("../todos.txt", "r") as file :
             todos = file.readlines()
 
         for index, todo in enumerate(todos):
@@ -412,13 +412,13 @@ while True :
         new_todo = input ("Enter new todo: ")
         todos[todo_index] = new_todo + "\n"
 
-        with open("todos.txt", "w") as file :
+        with open("../todos.txt", "w") as file :
             file.writelines(todos)
 
         print("Todo has been edited")
 
     elif user_input.startswith("complete") :
-        with open("todos.txt", "r") as file:
+        with open("../todos.txt", "r") as file:
             todos = file.readlines()
 
         for index, todo in enumerate(todos):
@@ -434,7 +434,7 @@ while True :
 
         completed_todo = todos.pop(todo_index).strip("\n")
 
-        with open("todos.txt", "w") as file:
+        with open("../todos.txt", "w") as file:
             file.writelines(todos)
 
         print(f"'{completed_todo}' marked as completed and removed from the list")
