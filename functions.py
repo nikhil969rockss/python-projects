@@ -17,3 +17,23 @@ def write_todos(todos_list, filepath="todos.txt"):
         """
     with open(filepath, "w") as file_local:
         file_local.writelines(todos_list)
+
+
+def remove_new_lines(todos_list):
+    """Removes \n from the todos list"""
+    return [todo.replace("\n", "") for todo in todos_list]
+
+
+def add_new_line(todos_list):
+    """Adds a '\n at the end of the todos"""
+    todos = []
+    for todo in todos_list:
+        if  "\n" in todo:
+              todos.append(todo)
+        else:
+            todos.append(todo+"\n")
+    return todos
+
+print(__name__)
+if __name__ == "__main__":
+    print(add_new_line(["learn python\n", "new todo"]))
