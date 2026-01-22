@@ -1,7 +1,10 @@
 import FreeSimpleGUI as fsg
+import time
 import functions
 
 fsg.theme("BlueMono")
+
+clock_label =  fsg.Text("", key="clock")
 
 input_label = fsg.Text("Type your todo in")
 input_box = fsg.InputText(tooltip="Enter todo", key="todo-input", size=(41,1))
@@ -15,13 +18,18 @@ edit_button = fsg.Button("Edit", tooltip="edit-todo")
 
 complete_button = fsg.Button("Complete", tooltip="complete-todo")
 
+exit_button = fsg.Button("Exit")
+
 #   To make the layout column wise
 # layoutCol1 = fsg.Column([[input_label], [input_box], [todos_box]])
 # layoutCol2 = fsg.Column([[add_button], [edit_button]])
 #
-layout = [[input_label, ],
+layout = [
+          [clock_label],
+          [input_label, ],
           [input_box, add_button],
-          [todos_box, edit_button, complete_button]
+          [todos_box, edit_button, complete_button]               ,
+          [exit_button]
           ]
 
 
@@ -29,12 +37,9 @@ layout = [[input_label, ],
 window = fsg.Window("Todo-App", layout=layout, font=('Helvetica', 20) )
 
 while True:
-    event, values = window.read()
-    print("event-", event)
-    print("values-", values)
-
-    all_todos = functions.get_todos()
-    print("todos ",all_todos)
+    event, values = window.read(timeout=200)
+    time_formate = time.strftime("%b %d %Y, %I:%M:%S %p")
+    window['clock'].update(value= time_formate)
 
     match event:
         case "Add":
@@ -95,6 +100,9 @@ while True:
 
             except IndexError:
                 fsg.popup("select a todo first", title="Error")
+
+        case "Exit":
+            break
         case fsg.WIN_CLOSED :
             break
 window.close()
