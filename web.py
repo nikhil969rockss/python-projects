@@ -8,7 +8,11 @@ if not os.path.exists("todos.txt") :
 
 all_todos = functions.get_todos()
 
-
+def add_todo():
+    new_todo = st.session_state['todo-input']+ '\n'
+    all_todos.append(new_todo)
+    functions.write_todos(all_todos)
+    st.session_state['todo-input'] = ""
 
 st.title("My Todo Web App")
 st.subheader("This todo app was developed by Nikhil-R")
@@ -19,7 +23,7 @@ for todo in all_todos:
 
 
 st.text_input(label="Enter a todo",placeholder="Enter a todo...",
-              key="todo-input",label_visibility="hidden",)
+              key="todo-input",label_visibility="hidden", on_change=add_todo )
 
 st.session_state
 
