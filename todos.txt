@@ -1,3 +1,2 @@
-learn git
-learn python
- 
+learn python and java
+eat breakfast
