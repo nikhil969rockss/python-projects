@@ -1,16 +1,26 @@
 import os
 from dotenv import load_dotenv
+from langchain_core.agents import AgentActionMessageLog
 
 from langchain_core.messages import  HumanMessage,AIMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain.tools import tool
+from langchain.agents import create_agent
 
 load_dotenv()
 
 GEMINI_API_KEY=os.getenv('GEMINI_API')
 TODOIST_API_KEY=os.getenv('TODOIST_API')
 
+@tool
+def add_task(task:str)-> str:
+    """add task to the list, if user ask to add task something"""
+    print(f"Adding {task}")
+    return f"{task} added successfully"
+
+tools = [add_task]
 model = ChatGoogleGenerativeAI(
     model='gemini-3-flash-preview',
     google_api_key=GEMINI_API_KEY,
@@ -18,19 +28,23 @@ model = ChatGoogleGenerativeAI(
 )
 system_prompt = """
 You are a helpful assistance, You will help the user to add task.
+if user want to add todo or task use add_task tool
 """
 
-user_input = "Tell me a joke today"
+user_input = "add a task for buy milk"
 
 prompt = ChatPromptTemplate([
      ("system",system_prompt)
     ,("user", user_input)])
 
-chain = prompt | model | StrOutputParser()
+# chain = prompt | model | StrOutputParser()
 
-response = chain.invoke({
-    "input": user_input
-})
+agent = create_agent(model=model, tools=tools)
 
-print(response)
+
+response = agent.invoke(
+    {"messages": [{"role": "user", "content": user_input}]}
+)
+
+print(response['messages'])
 
