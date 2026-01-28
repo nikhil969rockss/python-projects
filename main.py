@@ -73,6 +73,9 @@ state =  AgentState(
 
 while True:
     user_input = input("You: ")
+    if user_input.strip() == 'exit':
+        break
+
     state['messages'].append(HumanMessage(content=user_input))
 
     state = agent.invoke(state)
