@@ -22,15 +22,38 @@ def add_task(task:str, desc:str|None=None)-> None:
     """add task to the list, if user ask to add task something"""
     todoist.add_task(content=task,description=desc)
 
-tools = [add_task]
+
+@tool
+def show_task():
+    """This function shows all the tasks from todoist to tne user, Use this if user
+    wants to show all the task,
+    """
+    all_tasks = []
+    result = todoist.get_tasks()
+    for tasks in result:
+        for task in tasks:
+            all_tasks.append(task.content)
+    return all_tasks
+
+
+
+
+
+tools = [add_task, show_task]
+
+#creating model
 model = ChatGoogleGenerativeAI(
-    model='gemini-2.5-flash',
+    model='gemini-2.5-flash-lite',
     google_api_key=GEMINI_API_KEY,
     temperature=1
 )
+
+#adding system prompt
 system_prompt = """
 You are a helpful assistance, You will help the user to add task.
-if user want to add todo or task use add_task tool
+if user want to add todo or task use add_task tool,
+if user want to show all todos or task use show_task tool for example:"show all
+task" or "show all todos" print out all the tasks in a bullet points
 """
 
 prompt = ChatPromptTemplate([
@@ -41,8 +64,9 @@ prompt = ChatPromptTemplate([
 
 # chain = prompt | model | StrOutputParser()
 parser = StrOutputParser()
-agent = create_agent(model=model, tools=tools)
+agent = create_agent(model=model, tools=tools,system_prompt=system_prompt)
 
+#state for managing history
 state =  AgentState(
     messages=[]
 )
@@ -55,4 +79,4 @@ while True:
 
     ai_response = state['messages'][-1]
 
-    print("AI:",ai_response.content)
+    print("AI:",parser.invoke(ai_response))
