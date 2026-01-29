@@ -64,6 +64,10 @@ def submit_chat(user_mes,hist):
             {"role": "assistant",
                     "content": f"unexpected error: {str(e)}"}]
 
+
+def clear_chat():
+    return "",[]
+
 page = gr.Blocks(title="Chat with Einstein")
 
 with page:
@@ -80,6 +84,7 @@ with page:
     msg.submit(submit_chat, inputs=[msg,chatbox], outputs=[msg,chatbox])
 
     clear = gr.Button(value='Clear', variant='primary',)
+    clear.click(fn=clear_chat, outputs=[msg,chatbox])
 
 page.launch(share=True,
             theme=gr.themes.Glass(font=[gr.themes.GoogleFont("Inconsolata"),
