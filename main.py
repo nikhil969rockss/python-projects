@@ -1,5 +1,7 @@
 import os
 from dotenv import load_dotenv
+import getpass
+
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -9,6 +11,9 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 load_dotenv()
 
 gemini_key = os.getenv('GEMINI_API_KEY')
+
+if "GOOGLE_API_KEY" not in os.environ:
+    os.environ["GOOGLE_API_KEY"] = getpass.getpass("Enter your Google AI API key: ")
 
 model = ChatGoogleGenerativeAI(
     model='gemini-2.5-flash-lite',
