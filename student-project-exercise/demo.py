@@ -1,6 +1,10 @@
 from flask import Flask, render_template
+import pandas as pd
 
 app = Flask(__name__)
+
+df = pd.read_csv("dictionary.csv")
+
 
 @app.route("/")
 def home():
@@ -8,11 +12,16 @@ def home():
 
 @app.route("/api/v1/<word>")
 def api(word):
-    uppercase_word = word.upper()
+
+    definition = df.loc[df['word'] == word]['definition']
+    print(definition)
+    if definition.empty:
+        return {"word": word, "definition": f"{word} is not in the list"}
+
     json_format = {"word": word,
-                   "uppercase": uppercase_word}
+                   "definition": definition.iloc[0]}
     return json_format
 
-print(__name__)
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
