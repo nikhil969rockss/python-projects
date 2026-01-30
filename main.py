@@ -1,5 +1,7 @@
 from flask import Flask, render_template
 import pandas as pd
+from pandas.core.methods.selectn import DataFrame, Series
+
 app = Flask(__name__)
 
 # If you have data which keep on adding data day by you could read the data
@@ -24,21 +26,34 @@ def about():
 
 @app.route("/api/v1/<station>/<date>")
 def api(station, date):
+    try:
+        df = pd.read_csv("data_small/TG_STAID"+station.zfill(6) +".txt",
+                         skiprows=20, parse_dates=['    DATE'])
 
-    df = pd.read_csv("data_small/TG_STAID"+station.zfill(6) +".txt",
-                     skiprows=20, parse_dates=['    DATE'])
-    temperature = df.loc[df['    DATE'] == date]['   TG'].squeeze() / 10
+        temperature_series = df.loc[df['    DATE'] == date]['   TG']
 
-    df2= pd.read_csv("data_small/stations.txt",skiprows=17)
+        if temperature_series.empty:
+             return {"station_code":station,"station_name":"Not found",
+                        "date": date, "message": "Invalid date syntax or date is wrong"}
 
-    STANAME = 'STANAME                                 '
+        temperature = temperature_series.iloc[0]/10
 
-    station_name = df2.loc[df2['STAID'] == int(station)][STANAME].squeeze().strip()
-    print(station_name)
+        df2= pd.read_csv("data_small/stations.txt",skiprows=17)
 
-    weather_json = {"station_code":station,"station_name":station_name,
-                    "date": date, "temperature":temperature}
-    return weather_json
+        STANAME = 'STANAME                                 '
+
+        station_name = df2.loc[df2['STAID'] == int(station)][STANAME].squeeze().strip()
+        print(station_name)
+
+        weather_json = {"station_code":station,"station_name":station_name,
+                        "date": date, "temperature":temperature}
+        return weather_json
+
+    except FileNotFoundError :
+        return {"station_code": station, "station_name": "Not found",
+     "date": date, "message": f"{station} station code doest not exist"}
+
+
 
 
 if __name__ == "__main__":
