@@ -50,8 +50,8 @@ def api(station, date):
         return weather_json
 
     except FileNotFoundError :
-        return {"station_code": station, "station_name": "Not found",
-     "date": date, "message": f"{station} station code doest not exist"}
+        return {"error": "404", "station_name": "Not found",
+                "message": f"{station} station code doest not exist"}
 
 
 @app.route("/api/v1/<station_code>")
@@ -60,14 +60,38 @@ def all_data(station_code):
         df = pd.read_csv("data_small/TG_STAID" + station_code.zfill(6) + ".txt",
                          skiprows=20, parse_dates=['    DATE'])
 
+        df["T_CEL"] = df['   TG'] / 10
+
         return df.to_dict(orient='records')
 
-
     except FileNotFoundError:
-        return {"station_code": station_code, "station_name": "Not found",
+        return {"error": "404", "station_name": "Not found",
                 "message": f"{station_code} station code doest not exist"}
 
 
+@app.route('/api/v1/yearly/<station_code>/<year>')
+def get_yearly_data(station_code,year):
+    try:
+        df = pd.read_csv("data_small/TG_STAID" + station_code.zfill(6) + ".txt",
+                         skiprows=20, parse_dates=['    DATE'])
+
+        # extract only year and put it into new column YEAR
+        df['YEAR'] = df['    DATE'].dt.year
+
+        yearly_data = df[df["YEAR"] == int(year)]
+
+
+        if yearly_data.empty:
+            return {"error":"404", "message": f"This {year} data not exist"}
+
+        yearly_data["T_CEL"] = df['   TG'] / 10
+
+        return yearly_data.to_dict(orient='records')
+        # return "hello"
+
+    except FileNotFoundError:
+        return {"error": "404", "station_name": "Not found",
+                "message": f"{station_code} station code doest not exist"}
 
 if __name__ == "__main__":
     app.run(debug=True,)
