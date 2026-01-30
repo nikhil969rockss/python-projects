@@ -54,6 +54,19 @@ def api(station, date):
      "date": date, "message": f"{station} station code doest not exist"}
 
 
+@app.route("/api/v1/<station_code>")
+def all_data(station_code):
+    try:
+        df = pd.read_csv("data_small/TG_STAID" + station_code.zfill(6) + ".txt",
+                         skiprows=20, parse_dates=['    DATE'])
+
+        return df.to_dict(orient='records')
+
+
+    except FileNotFoundError:
+        return {"station_code": station_code, "station_name": "Not found",
+                "message": f"{station_code} station code doest not exist"}
+
 
 
 if __name__ == "__main__":
