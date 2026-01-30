@@ -4,12 +4,18 @@ app = Flask(__name__)
 
 # If you have data which keep on adding data day by you could read the data
 # inside the route(def) as well
-# in this case since .txt files are according STAID, have to call df inside
+# in this case since .txt files are according STAID, have to call df
 # inside the route
+
+# Reading station.txt for documentation purposes
+
+stations_df = pd.read_csv("data_small/stations.txt", skiprows=17)
+stations_df["STANAME"] = stations_df['STANAME                                 ']
+stations_df = stations_df[['STAID','STANAME']]
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("index.html", data=stations_df.to_html())
 
 
 @app.route("/about")
