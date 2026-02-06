@@ -1,6 +1,7 @@
 import smtplib
 from email.message import EmailMessage
-import imghdr
+from pathlib import Path
+import mimetypes
 
 PASSWORD = "<Your app password>"
 sender_email= "<your email id>"
@@ -14,8 +15,13 @@ def send_email(image_file):
     with open(image_file, "rb") as file:
         content = file.read()
 
-    email_message.add_attachment(content, maintype="image",
-                                 subtype=imghdr.what(None, content))
+    mime_types = mimetypes.guess_type(image_file)
+    maintype, subtype = mime_types.split("/")
+
+    email_message.add_attachment(content,
+                                 maintype=maintype,
+                                 subtype=subtype,
+                                 filename=Path(image_file).name)
 
     gmail  = smtplib.SMTP("smtp.gmail.com", 587)
     gmail.ehlo()
