@@ -16,7 +16,30 @@ def extract(source):
     value = extractor.extract(source)['tour']
     return value
 
+
+def event(event):
+    with open("events.txt", "a") as file:
+        file.write(event + "\n")
+
+
+def read_event(filename):
+    with open(filename , "r") as file:
+        return file.read()
+    
+def send_email():
+    print("Email was sent")
+
+
+
 if __name__ == '__main__':
-     scrapped = scrape(URL)
-     extracted = extract(scrapped)
-     print(extracted)
+    scrapped = scrape(URL)
+    extracted = extract(scrapped)
+    print(extracted)
+
+    if extracted != "No upcoming tours":
+        content = read_event("events.txt")
+        if extracted not in content:
+            event(extracted)
+            send_email()
+    
+
