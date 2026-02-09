@@ -1,7 +1,11 @@
 import requests
 import selectorlib
+import sqlite3
+import time
 
 URL = 'https://programmer100.pythonanywhere.com/tours/'
+
+connection = sqlite3.connect("data.db")
 
 def scrape(url):
     """Scrape the page source from the URL"""
@@ -17,29 +21,45 @@ def extract(source):
     return value
 
 
-def event(event):
-    with open("events.txt", "a") as file:
-        file.write(event + "\n")
+def formate_event(event):
+    event = event.split(",")
+    event = [i.strip(" ") for i in event]
+    return event
 
 
-def read_event(filename):
-    with open(filename , "r") as file:
-        return file.read()
-    
+def add_event(event):
+    event = formate_event(event=event)
+    cusror = connection.cursor()
+    cusror.execute("INSERT INTO events VALUES(?,?,?)", event)
+    connection.commit()
+
+
+def read_event(event):
+    event = formate_event(event=event)
+    band, city, date = event
+    cusror = connection.cursor()
+    cusror.execute("SELECT * FROM events WHERE band=? AND city=? AND date=?", 
+                   (band,city,date))
+    rows = cusror.fetchall()
+    return rows #list of tupels
+
+
 def send_email():
     print("Email was sent")
 
 
-
 if __name__ == '__main__':
-    scrapped = scrape(URL)
-    extracted = extract(scrapped)
-    print(extracted)
+    while True:
+        scrapped = scrape(URL)
+        extracted = extract(scrapped)
+        print(extracted)
 
-    if extracted != "No upcoming tours":
-        content = read_event("events.txt")
-        if extracted not in content:
-            event(extracted)
-            send_email()
-    
+        if extracted != "No upcoming tours":
+            rows = read_event(event=extracted)
+
+            if not rows:
+                add_event(extracted)
+                send_email()
+
+        time.sleep(2)
 
