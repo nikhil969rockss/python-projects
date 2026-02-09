@@ -16,18 +16,26 @@ def scrape(url):
 
 
 def extract(source):
+    """Extract the required content from the html text string
+    with using yaml file
+    """
     extractor = selectorlib.Extractor.from_yaml_file("extract.yaml")
     value = extractor.extract(source)['tour']
     return value
 
 
 def formate_event(event):
+    """Format the event in this format\n
+    ["band","city","date"]
+    """
     event = event.split(",")
     event = [i.strip(" ") for i in event]
     return event
 
 
 def add_event(event):
+    """ add event to the database using sql"""
+
     event = formate_event(event=event)
     cusror = connection.cursor()
     cusror.execute("INSERT INTO events VALUES(?,?,?)", event)
@@ -35,6 +43,8 @@ def add_event(event):
 
 
 def read_event(event):
+    """read query from the table {ie, events}"""
+    
     event = formate_event(event=event)
     band, city, date = event
     cusror = connection.cursor()
