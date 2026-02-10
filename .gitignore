@@ -1,2 +1,4 @@
 .venv/
 .idea/
+rough.py
+.DS_Store

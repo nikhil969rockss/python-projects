@@ -53,6 +53,11 @@ book your hotel according to your need \n\n
 print(welcome)
 print(df)
 
+user_option = input("\nDo you want to see only availabe hotels ? ")
+if "yes" in user_option or user_option == 'y':
+    available_hotels = df.loc[df["available"] == "yes"]
+    print(available_hotels)
+
 hotel_id = input("\nEnter id of your hotel: ")
 hotel = Hotel(hotel_id)
 
