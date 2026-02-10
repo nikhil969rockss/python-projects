@@ -59,11 +59,11 @@ class ReservationTicket():
         pdf.add_page()
         pdf.set_font(family="Courier", size=20, style="B")
         pdf.set_text_color(178,195,255)
-        pdf.cell(w=0, h=10, ln=1, txt=f"Thank Your For Booking Your hotel", align="center")
+        pdf.cell(w=0, h=10, ln=1, txt=f"Thank You For Booking Your hotel", align="C")
 
         pdf.set_font(family="Courier", size=17, style="B")
         pdf.set_text_color(10,10,10)
-        pdf.cell(w=0,h=10,ln=1, txt=f"Booking Ticket",align="center")
+        pdf.cell(w=0,h=10,ln=1, txt=f"Booking Ticket",align="C")
 
         pdf.set_font(family="Courier", size=14, style="B")
         pdf.cell(w=0,h=10,ln=1, txt=f"booking name - {self.customer_name.title()}",)
@@ -72,8 +72,6 @@ class ReservationTicket():
 
         pdf.output("reservation_ticket.pdf")
         
-
-
 
 class CardDetails:
     def __init__(self, card_number) :
@@ -134,7 +132,7 @@ if hotel.available():
         card_balance = card.get_balance()
         hotel_name = hotel.hotel_name
 
-        user_ans = input(f"Are you sure you want to book {hotel_name} at {hotel_price}? ")
+        user_ans = input(f"Are you sure you want to book {hotel_name} at {hotel_price}? (Yes/No) ")
 
         if user_ans.lower() == 'yes':
 
