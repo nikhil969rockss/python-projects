@@ -3,10 +3,14 @@ import pandas as pd
 
 df = pd.read_csv("hotels.csv",dtype={"id":str} )
 
+
 class Hotel():
     def __init__(self, hotel_id):
-        self.hotel_id = hotel_id
-
+        try:
+            self.hotel_id = hotel_id
+            self.hotel_name = df.loc[df["id"] == self.hotel_id, "name"].iloc[0]
+        except :
+            print("Please enter a valid hotel id")
 
     def book(self):
         df.loc[df["id"] == self.hotel_id, "available"] = "no"
@@ -15,22 +19,30 @@ class Hotel():
 
     def available(self):
         """checks whether hotel avaiable or not"""
-        availability = df[df["id"] == self.hotel_id]["available"][0]
-        if availability == 'yes':
-            return True
-        else:
-            return False
+        try:
+            availability = df.loc[df["id"] == self.hotel_id, "available"].iloc[0]
+            if availability == 'yes':
+                return True
+            else:
+                return False
+        except :
+            pass
 
 
 class ReservationTicket():
     
-    def __init__(self, customer_name, hotel_name):
+    def __init__(self, customer_name, hotel_object:Hotel):
         self.customer_name = customer_name
-        self.hotel_name = hotel_name
+        self.hotel_object = hotel_object
 
 
-    def generate_ticket():
-        pass
+    def generate_ticket(self):
+        message = f"""\n\nThank you for booking your hotel
+        Here's your booking ticket:
+        booking name - {self.customer_name}
+        hotel name - {self.hotel_object.hotel_name}
+        """
+        return message
 
 
 welcome = """\n===============* Welcome to the hotel booking app *============= \n
@@ -45,10 +57,10 @@ hotel_id = input("\nEnter id of your hotel: ")
 hotel = Hotel(hotel_id)
 
 if hotel.available():
-    name = input("Enter your name")
+    name = input("Enter your name ")
     hotel.book()
     reseravtion_ticket = ReservationTicket(name, hotel)
-    reseravtion_ticket.generate_ticket()
+    print(reseravtion_ticket.generate_ticket())
 
 else :
     print("currently, No hotel is available, Sorry for inconvience\n" \
