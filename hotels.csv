@@ -9,7 +9,6 @@ id,name,city,capacity,available,price
 108,South Delhi Retreat,New Delhi,4,no,5100
 109,Green Park Comforts,New Delhi,3,yes,4300
 110,Saket Urban Stay,New Delhi,2,yes,3400
-
 111,Noida Corporate Inn,Noida,4,no,4100
 112,Blue Metro Residency,Noida,3,yes,3600
 113,Tech City Hotel,Noida,5,no,6500
@@ -20,18 +19,16 @@ id,name,city,capacity,available,price
 118,Noida Horizon Hotel,Noida,5,yes,6700
 119,Urban Nest Noida,Noida,3,yes,3700
 120,Silver Leaf Residency,Noida,2,no,3000
-
-121,Gurgaon Cyber Hub Hotel,Gurugram,5,yes,7500
+121,Gurgaon Cyber Hub Hotel,Gurugram,5,no,7500
 122,Millennium City Inn,Gurugram,4,no,4800
 123,DLF Phase Stay,Gurugram,3,yes,4200
 124,Udyog Vihar Residency,Gurugram,4,no,4600
-125,Golf Course Road Suites,Gurugram,5,yes,8200
+125,Golf Course Road Suites,Gurugram,5,no,8200
 126,Corporate Comfort Gurugram,Gurugram,3,no,4000
 127,MG Road Business Hotel,Gurugram,4,yes,5200
 128,City View Gurugram,Gurugram,2,no,3500
 129,Urban Stay Gurugram,Gurugram,3,yes,4100
 130,Greenwood Residency,Gurugram,4,no,4700
-
 131,Ghaziabad Grand Hotel,Ghaziabad,4,yes,3900
 132,Vaishali Comfort Inn,Ghaziabad,3,no,3300
 133,Indirapuram Stay,Ghaziabad,5,yes,6100
@@ -42,14 +39,13 @@ id,name,city,capacity,available,price
 138,Raj Nagar Suites,Ghaziabad,3,no,3400
 139,Ghaziabad Business Stay,Ghaziabad,5,yes,5900
 140,Sapphire Residency,Ghaziabad,4,no,4300
-
 141,Faridabad Crown Hotel,Faridabad,4,yes,3800
 142,Surajkund Retreat,Faridabad,5,no,7000
 143,Metro Stay Faridabad,Faridabad,3,yes,3400
 144,Industrial Area Inn,Faridabad,4,no,3600
 145,Green Valley Residency,Faridabad,3,yes,3300
 146,Faridabad Budget Stay,Faridabad,2,no,2400
-147,City Square Hotel,Faridabad,4,yes,3900
+147,City Square Hotel,Faridabad,4,no,3900
 148,Urban Comfort Faridabad,Faridabad,3,no,3500
 149,Neelam Chowk Suites,Faridabad,5,yes,5800
 150,Sunrise Residency Faridabad,Faridabad,4,no,4100
