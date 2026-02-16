@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QLineEdit, QLabel ,\
-     QMainWindow
+     QMainWindow, QTableWidget
 from PyQt6.QtGui import QAction
 
 import sys    
@@ -29,6 +29,14 @@ class StudentManagement(QMainWindow):
         # menu bar
         about_action.setMenuRole(QAction.MenuRole.NoRole)
 
+        # creating the table for central widget
+
+        self.table = QTableWidget()
+        self.table.setColumnCount(5)
+        self.table.setHorizontalHeaderLabels(("ID", "Name", "Class",
+                                              "Section", "Phone number"))
+
+        self.setCentralWidget(self.table)
 
 app = QApplication(sys.argv)
 window = StudentManagement()
