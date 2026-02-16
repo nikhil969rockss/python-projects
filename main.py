@@ -1,7 +1,7 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QApplication, QLineEdit, QLabel ,\
+from PyQt6.QtWidgets import QApplication, QLineEdit ,\
      QMainWindow, QTableWidget, QTableWidgetItem,QDialog, QVBoxLayout, \
-     QComboBox, QPushButton, QWidget
+     QComboBox, QPushButton
 
 from PyQt6.QtGui import QAction
 import sqlite3
