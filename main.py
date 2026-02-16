@@ -1,8 +1,8 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QLineEdit, QLabel ,\
-     QMainWindow, QTableWidget
+     QMainWindow, QTableWidget, QTableWidgetItem
 from PyQt6.QtGui import QAction
-
+import sqlite3
 import sys    
 
 
@@ -34,11 +34,33 @@ class StudentManagement(QMainWindow):
         self.table = QTableWidget()
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(("ID", "Name", "Class",
-                                              "Section", "Phone number"))
-
+                                              "Section", "Phone Number"))
+        self.table.verticalHeader().setVisible(False)
         self.setCentralWidget(self.table)
+
+
+    def load_data(self):
+        """This method is used to load the data and
+        display it in the table widget"""
+        
+        connection = sqlite3.connect("database.db")
+        cursor = connection.cursor()
+        rows = cursor.execute("SELECT * FROM students").fetchall()
+        # print(rows) # list of tuples
+
+        self.table.setRowCount(0) # clear the table before populating it
+        # populate the data to the table widget
+        for row_number, row_data in enumerate(rows):
+            self.table.insertRow(row_number)
+            for coumn_number, data in enumerate(row_data):
+                self.table.setItem(row_number, coumn_number,
+                                   QTableWidgetItem(str(data)))
+        
+        cursor.close()
+        connection.close()
 
 app = QApplication(sys.argv)
 window = StudentManagement()
 window.show()
+window.load_data()
 sys.exit(app.exec())
