@@ -1,6 +1,8 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QLineEdit, QLabel ,\
-     QMainWindow, QTableWidget, QTableWidgetItem
+     QMainWindow, QTableWidget, QTableWidgetItem,QDialog, QVBoxLayout, \
+     QComboBox, QPushButton
+
 from PyQt6.QtGui import QAction
 import sqlite3
 import sys    
@@ -21,6 +23,7 @@ class StudentManagement(QMainWindow):
         help_menu = self.menuBar().addMenu("&Help")
 
         add_student_action = QAction("Add Student", self)
+        add_student_action.triggered.connect(self.add_student)
         file_menu.addAction(add_student_action)
 
         about_action = QAction("About", self)
@@ -58,6 +61,68 @@ class StudentManagement(QMainWindow):
         
         cursor.close()
         connection.close()
+
+
+    def add_student(self):
+        dialoge = AddStudentDialog()
+        dialoge.exec()
+
+class AddStudentDialog(QDialog):
+    def __init__(self, ) :
+        super().__init__()
+
+        self.setWindowTitle("Add Student")
+        self.resize(400,400)
+
+        layout = QVBoxLayout()
+
+        # name widget
+
+        self.student_name = QLineEdit()
+        self.student_name.setPlaceholderText("Enter Name")
+        layout.addWidget(self.student_name)
+
+        # class widget
+        self.student_class = QComboBox()
+        classes = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII",
+                   "IX", "X", "XI", "XII"]
+        self.student_class.setPlaceholderText("Select Class")
+        self.student_class.addItems(classes)
+        layout.addWidget(self.student_class)
+ 
+        # section widget
+        self.student_section = QComboBox()
+        sections = ["A", "B", "C", "D", "E"]
+        self.student_section.setPlaceholderText("Select Section")
+        self.student_section.addItems(sections)
+        layout.addWidget(self.student_section)
+
+        # phone number widget
+        self.student_phone = QLineEdit()
+        self.student_phone.setPlaceholderText("Enter Phone Number")
+        self.student_phone.setInputMask('+91 00000 00000;_') # only 10 digits allowed
+        layout.addWidget(self.student_phone)
+
+        button = QPushButton("Register Student")
+        button.clicked.connect(self.register_student)
+        layout.addWidget(button)
+
+        self.setLayout(layout)
+
+    def register_student(self):
+        name = self.student_name.text().strip().title()
+        student_class = self.student_class.itemText(self.student_class.currentIndex())
+        student_section = self.student_section.itemText(self.student_section.currentIndex())
+        phone_number = self.student_phone.text().strip()
+
+        connection = sqlite3.connect("database.db")
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO students (Name, Class, Section, 'Phone Number') VALUES (?,?,?,?)",
+                       (name, student_class, student_section, phone_number))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        window.load_data()
 
 app = QApplication(sys.argv)
 window = StudentManagement()
