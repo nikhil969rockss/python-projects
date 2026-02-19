@@ -1,7 +1,7 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QLineEdit ,\
      QMainWindow, QTableWidget, QTableWidgetItem,QDialog, QVBoxLayout, \
-     QComboBox, QPushButton, QToolBar
+     QComboBox, QPushButton, QToolBar, QStatusBar
 
 from PyQt6.QtGui import QAction, QIcon
 import sqlite3
@@ -45,6 +45,7 @@ class StudentManagement(QMainWindow):
         toolbar.addAction(add_student_action)
         toolbar.addAction(search_action)
 
+        
         # creating the table for central widget
 
         self.table = QTableWidget()
@@ -52,7 +53,21 @@ class StudentManagement(QMainWindow):
         self.table.setHorizontalHeaderLabels(("ID", "Name", "Class",
                                               "Section", "Phone Number"))
         self.table.verticalHeader().setVisible(False)
+
+        # making the table read only
+        self.table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+
         self.setCentralWidget(self.table)
+
+        # creating the status bar
+        statusbar = QStatusBar()
+        self.setStatusBar(statusbar)
+
+        # display the button only if the cell is clicked
+        # detect the cell clicked
+
+        self.table.cellClicked.connect(self.cell_clicked)
+
 
 
     def load_data(self):
@@ -82,6 +97,30 @@ class StudentManagement(QMainWindow):
     def add_student(self):
         dialoge = AddStudentDialog()
         dialoge.exec()
+
+    def cell_clicked(self):
+        edit_button = QPushButton("Edit Record")
+        edit_button.clicked.connect(self.edit_record)
+
+        delete_button = QPushButton("Delete Record")
+        delete_button.clicked.connect(self.delete_record)
+
+        children = self.findChildren(QPushButton)
+        if children:
+            for child in children:
+                self.statusBar().removeWidget(child)
+        
+        self.statusBar().addWidget(edit_button)
+        self.statusBar().addWidget(delete_button)
+
+    def edit_record(self):
+        dialog = EditDialog()
+        dialog.exec()
+    
+    def delete_record(self):
+        dialog = DeleteDialog()
+        dialog.exec()
+
 
 class AddStudentDialog(QDialog):
     def __init__(self, ) :
@@ -180,6 +219,13 @@ class SearchDialog(QDialog):
         # clsoing the dialoge
         self.close()
 
+
+class EditDialog(QDialog):
+    pass
+
+
+class DeleteDialog(QDialog):
+    pass
         
 app = QApplication(sys.argv)
 window = StudentManagement()
