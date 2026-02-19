@@ -1,9 +1,9 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QLineEdit ,\
      QMainWindow, QTableWidget, QTableWidgetItem,QDialog, QVBoxLayout, \
-     QComboBox, QPushButton
+     QComboBox, QPushButton, QToolBar
 
-from PyQt6.QtGui import QAction
+from PyQt6.QtGui import QAction, QIcon
 import sqlite3
 import sys    
 
@@ -23,7 +23,7 @@ class StudentManagement(QMainWindow):
         help_menu = self.menuBar().addMenu("&Help")
         edit_menu = self.menuBar().addMenu("&Edit")
 
-        add_student_action = QAction("Add Student", self)
+        add_student_action = QAction(QIcon("icons/add.png"),"Add Student", self)
         add_student_action.triggered.connect(self.add_student)
         file_menu.addAction(add_student_action)
 
@@ -33,10 +33,17 @@ class StudentManagement(QMainWindow):
         # menu bar
         about_action.setMenuRole(QAction.MenuRole.NoRole)
 
-        search_action = QAction("Search", self)
+        search_action = QAction(QIcon("icons/search.png"),"Search", self)
         search_action.triggered.connect(self.search)
         edit_menu.addAction(search_action)
 
+        # creating the toolbar 
+        toolbar = QToolBar()
+        toolbar.setMovable(True)
+        self.addToolBar(toolbar)
+
+        toolbar.addAction(add_student_action)
+        toolbar.addAction(search_action)
 
         # creating the table for central widget
 
@@ -117,7 +124,6 @@ class AddStudentDialog(QDialog):
         layout.addWidget(button)
 
         self.setLayout(layout)
-        
 
 
     def register_student(self):
@@ -135,6 +141,7 @@ class AddStudentDialog(QDialog):
         connection.close()
         window.load_data()
         self.close()
+
 
 class SearchDialog(QDialog):
     def __init__(self, ):
@@ -173,7 +180,7 @@ class SearchDialog(QDialog):
         # clsoing the dialoge
         self.close()
 
-
+        
 app = QApplication(sys.argv)
 window = StudentManagement()
 window.show()
