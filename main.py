@@ -7,14 +7,22 @@ from PyQt6.QtWidgets import QApplication, QLineEdit ,\
 from PyQt6.QtGui import QAction, QIcon
 import sqlite3
 import sys    
+import mysql.connector
 
 
 class Database():
-    def __init__(self, datbase_file= "database.db") :
-        self.datbase_file = datbase_file
+    def __init__(self, host="localhost",user="root", 
+                 password="mysqldatabase", db_name="school") :
+        self.host = host
+        self.user = user
+        self.password = password
+        self.db_name = db_name
 
     def connect(self):
-        connection = sqlite3.connect(self.datbase_file)
+        connection = mysql.connector.connect(host=self.host, 
+                                             user=self.user, 
+                                             password=self.password,
+                                             database=self.db_name)
         return connection
 
 
@@ -61,8 +69,8 @@ class StudentManagement(QMainWindow):
 
         self.table = QTableWidget()
         self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(("ID", "Name", "Class",
-                                              "Section", "Phone Number"))
+        self.table.setHorizontalHeaderLabels(("id", "name", "class",
+                                              "section", "phone_number"))
         self.table.verticalHeader().setVisible(False)
 
         # making the table read only
@@ -86,7 +94,8 @@ class StudentManagement(QMainWindow):
         
         connection = Database().connect()
         cursor = connection.cursor()
-        rows = cursor.execute("SELECT * FROM students").fetchall()
+        cursor.execute("SELECT * FROM students")
+        rows = cursor.fetchall()
         # print(rows) # list of tuples
 
         self.table.setRowCount(0) # clear the table before populating it
@@ -187,7 +196,7 @@ class AddStudentDialog(QDialog):
 
         connection = Database().connect()
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO students (Name, Class, Section, 'Phone Number') VALUES (?,?,?,?)",
+        cursor.execute("INSERT INTO students (name, class, section, phone_number) VALUES (%s,%s,%s,%s)",
                        (name, student_class, student_section, phone_number))
         connection.commit()
         cursor.close()
@@ -222,8 +231,9 @@ class SearchDialog(QDialog):
         name = self.search_input.text().strip().title()
         connection = Database().connect()
         cursor = connection.cursor()
-        rows = cursor.execute("SELECT * FROM students WHERE Name LIKE ?",
-                              (f"%{name}%",)).fetchall()
+        cursor.execute("SELECT * FROM students WHERE name LIKE %s",
+                              (f"%{name}%",))
+        rows = cursor.fetchall()
         
         if rows:
             items = window.table.findItems(name,Qt.MatchFlag.MatchContains)
@@ -295,7 +305,7 @@ class EditDialog(QDialog):
 
         connection = Database().connect()
         cursor = connection.cursor()
-        cursor.execute("UPDATE students SET Name=?, Class=?, Section=?, 'Phone Number'=? WHERE ID=?",
+        cursor.execute("UPDATE students SET name=%s, class=%s, section=%s, phone_number=%s WHERE id=%s",
                        (updated_name,
                         updated_class,
                         updated_section,
@@ -333,7 +343,7 @@ class DeleteDialog(QDialog):
         #db connection
         connection = Database().connect()
         cursor = connection.cursor()
-        cursor.execute("DELETE FROM students WHERE ID=?", (student_id,))
+        cursor.execute("DELETE FROM students WHERE id=%s", (student_id,))
         connection.commit()
         cursor.close()
         connection.close()
