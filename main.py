@@ -1,7 +1,7 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QLineEdit ,\
      QMainWindow, QTableWidget, QTableWidgetItem,QDialog, QVBoxLayout, \
-     QComboBox, QPushButton, QToolBar, QStatusBar
+     QComboBox, QPushButton, QToolBar, QStatusBar, QWidget
 
 from PyQt6.QtGui import QAction, QIcon
 import sqlite3
@@ -221,14 +221,87 @@ class SearchDialog(QDialog):
 
 
 class EditDialog(QDialog):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Edit Student Record")
+        self.resize(300,300)
+        self.move(800,300)
+
+        layout = QVBoxLayout()
+        
+        
+        # populate the existing data 
+        index = window.table.currentRow()
+        selected_student_name = window.table.item(index,1).text()
+        selected_class = window.table.item(index, 2).text()
+        selected_section = window.table.item(index, 3).text()
+        selected_phone = window.table.item(index, 4).text()
+        
+        self.student_id = window.table.item(index,0).text()
+        # name widget
+        self.student_name = QLineEdit(selected_student_name)
+        self.student_name.setPlaceholderText("Enter Name")
+        layout.addWidget(self.student_name)
+
+        # class widget
+        self.student_class = QComboBox()
+        classes = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII",
+                   "IX", "X", "XI", "XII"]
+        self.student_class.setPlaceholderText("Select Class")
+        self.student_class.addItems(classes)
+        self.student_class.setCurrentText(selected_class)
+        layout.addWidget(self.student_class)
+ 
+        # section widget
+        self.student_section = QComboBox()
+        sections = ["A", "B", "C", "D", "E"]
+        self.student_section.setPlaceholderText("Select Section")
+        self.student_section.addItems(sections)
+        self.student_section.setCurrentText(selected_section)
+        layout.addWidget(self.student_section)
+
+        # phone number widget
+        self.student_phone = QLineEdit(selected_phone)
+        self.student_phone.setPlaceholderText("Enter Phone Number")
+        self.student_phone.setInputMask('+91 00000 00000;_') # only 10 digits allowed
+        layout.addWidget(self.student_phone)
+
+        button = QPushButton("Update Student")
+        button.clicked.connect(self.update_student)
+        layout.addWidget(button)
+
+        self.setLayout(layout)
+
+    def update_student(self):
+
+        updated_name = self.student_name.text().strip().title()
+        updated_class = self.student_class.itemText(self.student_class.currentIndex())
+        updated_section = self.student_section.itemText(self.student_section.currentIndex())
+        updated_phone = self.student_phone.text().strip()
+
+        connection = sqlite3.connect("database.db")
+        cursor = connection.cursor()
+        cursor.execute("UPDATE students SET Name=?, Class=?, Section=?, 'Phone Number'=? WHERE ID=?",
+                       (updated_name,
+                        updated_class,
+                        updated_section,
+                        updated_phone,
+                        self.student_id))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        window.load_data()
+        self.close()
 
 
 class DeleteDialog(QDialog):
-    pass
-        
+    def __init__(self, ):
+        super().__init__()
+
+
 app = QApplication(sys.argv)
 window = StudentManagement()
 window.show()
 window.load_data()
 sys.exit(app.exec())
+        
