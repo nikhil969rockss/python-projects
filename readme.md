@@ -18,7 +18,7 @@
     - hold the browser using input() function
     - driver.quit()
 
-  ## Login in website through selenium
+# Login in website through selenium
   ### Steps to follow
   - import the required classes and function
   ```.py
@@ -55,3 +55,27 @@
   - fake input() method to stop the execution while user presses enter
   - ```driver.quit()```
 
+
+
+# Filling Form Using Selenium
+  ## Steps to follow
+  - require all the neccessary classes and
+    functions like ```webdriver```,```Options```,
+    ```WebDriveWait```,```expected_condtions as EC```, ```By```
+  
+  - add options argument --disable-search-engine-choice-screen
+
+  - add binary_location for your custom browser 
+    exe file
+  - pass this options variable to ```webdriver.Chrome()``` class and save it to variable
+  - load the webpage via ```driver.get(url)``` method
+  - locate the first link to click use the ```driver.find_element(By.method,"")``` method to locate the button or particular field
+  - for clicking the button use the ```driver.execute_script("arguments[0].click()", button)```
+   method
+  - extract the form fields like these methods 
+    use By.XPATH, By.ID selector to select the element
+  - use ```.send_keys()``` method to pass the usernam, password, email fullname or whatever you have details to the form,
+  - execute the submit script as mentoined abover
+  
+
+    
