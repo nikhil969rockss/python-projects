@@ -11,7 +11,7 @@ options = Options()
 options.add_argument("--disable-search-engine-choice-screen")
 # options.binary_location = "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
 
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(options=options) # type: ignore
 
 # Load the website
 driver.get(URL)

@@ -77,5 +77,25 @@
   - use ```.send_keys()``` method to pass the usernam, password, email fullname or whatever you have details to the form,
   - execute the submit script as mentoined abover
   
+# Download file using Selenium
+## Steps to follow
+- import the necessary classes and functions
+  like ```webdriver```,```Options```,
+     ```By``` from selenium
+- instatiate the option variable with Option class
+- add arguments, binary_location of browser if any other browser you want to use
+- change the default location of the dowload image using ```prefs = {'download.default_directory': download_path}``` here the ```download_path = os.getcwd() + '/images'```
+- add this ```options.add_experimental_option('prefs',prefs)```
+- instatiate the ```webdriver.Chrome(options=options)``` with driver variable
+- now load the data using ```driver.get(url)```
+- ***Opting OOPs concept***
+- create class LocateElement() inside which define __init__ fucntion with pass
+now define locate_by_Id, locate_by_XPath function in this class
+- in locate_by_Id function ``` element = driver.find_element(By.ID, id)``` id is receive in parameter
+- same for function locate_by_XPath ```element = driver.find_element(By.ID, XPath)``` XPath is receive in parameter
+- define execute function for calling the button click
+- inside execute function ```driver.execute_script("arguments[0].click()", button)``` button is receive in parameter of the function
+- locate the button of required webpage using inspect, go to upload and download section
+- click the ```locator.execute(button)``` method to click the button
 
-    
+      
