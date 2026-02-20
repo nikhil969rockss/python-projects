@@ -1,7 +1,8 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QLineEdit ,\
      QMainWindow, QTableWidget, QTableWidgetItem,QDialog, QVBoxLayout, \
-     QComboBox, QPushButton, QToolBar, QStatusBar, QWidget
+     QComboBox, QPushButton, QToolBar, QStatusBar, QGridLayout,QLabel, \
+     QMessageBox
 
 from PyQt6.QtGui import QAction, QIcon
 import sqlite3
@@ -297,6 +298,40 @@ class EditDialog(QDialog):
 class DeleteDialog(QDialog):
     def __init__(self, ):
         super().__init__()
+        self.setWindowTitle("Delete Student Record")
+        
+        layout = QGridLayout()
+        message = QLabel("Are you sure you want to delete this record?")
+        yess_button = QPushButton("Yes")
+        yess_button.clicked.connect(self.delete_record)
+        no_button = QPushButton("No")
+        no_button.clicked.connect(self.close)
+
+        layout.addWidget(message,0,0,1,2)
+        layout.addWidget(yess_button, 1,0)
+        layout.addWidget(no_button,1,1)
+
+        self.setLayout(layout)
+
+
+    def delete_record(self):
+        index = window.table.currentRow()
+        student_id = window.table.item(index,0).text()
+        #db connection
+        connection = sqlite3.connect("database.db")
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM students WHERE ID=?", (student_id,))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        window.load_data()
+
+        success_message = QMessageBox()
+        success_message.setWindowTitle("Success")
+        success_message.setText("Record Deleted Successfully")
+        success_message.exec()
+        
+        self.close()
 
 
 app = QApplication(sys.argv)
