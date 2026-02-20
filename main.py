@@ -29,6 +29,7 @@ class StudentManagement(QMainWindow):
         file_menu.addAction(add_student_action)
 
         about_action = QAction("About", self)
+        about_action.triggered.connect(self.about)
         help_menu.addAction(about_action)
         # adding this line if we want to see the about action in
         # menu bar
@@ -68,8 +69,7 @@ class StudentManagement(QMainWindow):
         # detect the cell clicked
 
         self.table.cellClicked.connect(self.cell_clicked)
-
-
+        
 
     def load_data(self):
         """This method is used to load the data and
@@ -120,6 +120,10 @@ class StudentManagement(QMainWindow):
     
     def delete_record(self):
         dialog = DeleteDialog()
+        dialog.exec()
+
+    def about(self):
+        dialog = AboutDialog()
         dialog.exec()
 
 
@@ -333,6 +337,17 @@ class DeleteDialog(QDialog):
         
         self.close()
 
+
+class AboutDialog(QMessageBox):
+    def __init__(self,):
+        super().__init__()
+        self.setWindowTitle("About Student Management App")
+        self.setText("This is a simple student management application \
+                     built using PyQt6 and SQLite. It allows you to add,\
+                      edit, delete, and search for student records. \
+                     The application is designed to be user-friendly \
+                      and efficient for managing student information.")
+        self.exec()
 
 app = QApplication(sys.argv)
 window = StudentManagement()
