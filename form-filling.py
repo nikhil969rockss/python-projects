@@ -5,64 +5,99 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-URL="https://demoqa.com/"
-# define driver and options
-options = Options()
-options.add_argument("--disable-search-engine-choice-screen")
-# options.binary_location = "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
 
-driver = webdriver.Chrome(options=options) # type: ignore
+class WebAutomation():
+    def __init__(self, URL) :
+        self.URL = URL
+        # define driver and options
+        options = Options()
+        options.add_argument("--disable-search-engine-choice-screen")
+        #optional Brave Browser
+        # options.binary_location = "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+        self.driver = webdriver.Chrome(options=options) # type: ignore 
+    
+    def load_page(self):
+        """This function is to load the website"""
+        self.driver.get(self.URL)
+    
+    def element_by_id(self,id:str):
+        """Locate the element in the page\n
+        Using id of the element
+        """
+        element = self.driver.find_element(By.ID,id)
+        return element
 
-# Load the website
-driver.get(URL)
+    def element_by_XPath(self,XPath:str):
+        """Locate the element in the page\n Usign XPath of the element"""
+        element = self.driver.find_element(By.XPATH,XPath)
+        return element
+    
+    def execute(self, button):
+        """To execute the javascript for click the button"""
+        self.driver.execute_script("arguments[0].click();", button)
+
+    def login_form(self,username:str, password:str):
+        """To fill the form in the website according the page elements"""
+        #Locate the book_store button and click
+        book_store_button = self.element_by_XPath('//*[@id="root"]/div[1]/div/div[2]/div/a[6]')
+        self.execute(book_store_button)
+
+        # Locate the Login and click
+        login_page_button = self.element_by_XPath('/html/body/div[1]/div[1]/div/div/div[1]/div/div/div[6]/div/ul/li[1]/a')
+        self.execute(login_page_button)
+
+        # Extracting fields from the login form
+        username_field = self.element_by_id("userName")
+        password_field = self.element_by_id("password")
+        login_button = self.element_by_id("login")
+        
+        #Filling form
+        username_field.send_keys(username)
+        password_field.send_keys(password)
+        self.execute(login_button)
+
+    def fill_form(self,full_name,email, current_add, permanent_add):
+        """Fill form in the website page in the element tab section"""
+        #navigate to form page
+        element_tab_button = self.element_by_XPath('/html/body/div[1]/div[1]/div/div/div[1]/div/div/div[1]')
+        self.execute(element_tab_button)
+
+        text_box_tab = self.element_by_XPath('/html/body/div[1]/div[1]/div/div/div[1]/div/div/div[1]/div/ul/li[1]/a')
+        self.execute(text_box_tab)
+
+        #extracting from fields
+        full_name_field = self.element_by_id('userName')
+        email_field = self.element_by_id('userEmail')
+        current_add_field = self.element_by_id('currentAddress')
+        permanant_add_field = self.element_by_id('permanentAddress')
+        submit_button = self.element_by_id('submit')
+
+        #fill the form details
+        full_name_field.send_keys(full_name)
+        email_field.send_keys(email)
+        current_add_field.send_keys(current_add)
+        permanant_add_field.send_keys(permanent_add)
+
+        self.execute(submit_button)
+        self.execute(text_box_tab)
+    
+    def exit(self):
+        input("Press Enter to close the browser ")
+        self.driver.quit()   
+
 
 # This method showing me error
 # book_store_button = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="root"]/div[1]/div/div[2]/div/a[6]')))
 # book_store_button.click()
 
-#Locate the book_store button and click
-book_store_button = driver.find_element(By.XPATH, '//*[@id="root"]/div[1]/div/div[2]/div/a[6]')
-driver.execute_script("arguments[0].click();", book_store_button)
-
-
-# Locate the Login and click
-login_page_button = driver.find_element(By.XPATH,'/html/body/div[1]/div[1]/div/div/div[1]/div/div/div[6]/div/ul/li[1]/a')
-driver.execute_script("arguments[0].click();", login_page_button)
-
-
-# Extracting fields from the login form
-username_field = driver.find_element(By.ID, "userName")
-password_field = driver.find_element(By.ID, "password")
-
-#Filling form
-username_field.send_keys("nikhil969")
-password_field.send_keys("Nikhil969rock@")
-login_button = driver.find_element(By.ID, "login")
-driver.execute_script("arguments[0].click()", login_button)
-
-#Locate the form 
-elements_button = driver.find_element(By.XPATH,'/html/body/div[1]/div[1]/div/div/div[1]/div/div/div[1]')
-elements_button.click()
-text_box_button = driver.find_element(By.XPATH,'/html/body/div[1]/div[1]/div/div/div[1]/div/div/div[1]/div/ul/li[1]/a')
-driver.execute_script("arguments[0].click()", text_box_button)
-
-# extracting the form elements 
-full_name_field = driver.find_element(By.ID, "userName")
-email_field = driver.find_element(By.ID, "userEmail")
-current_add_field = driver.find_element(By.ID, "currentAddress")
-permanant_add_field = driver.find_element(By.ID, "permanentAddress")
-submit_button = driver.find_element(By.ID,"submit")
-
-#filling the fields
-full_name_field.send_keys("Nikhil Singh")
-email_field.send_keys("nikhil@gmail.com")
-current_add_field.send_keys("nikhil shah road c3")
-permanant_add_field.send_keys("nikhil shah road c3")
-
-driver.execute_script("arguments[0].click();", submit_button)
-driver.execute_script("arguments[0].click()", text_box_button)
+automate = WebAutomation(URL='https://demoqa.com')
+automate.load_page()
+automate.login_form(username='nikhil969',password='Nikhil969rock@')
+automate.fill_form(full_name='Nikhil Singh', email='nikhil@gmail.com',
+                   current_add='nikhil shah bahadur prataph sing road',
+                   permanent_add='nikhil shah bahadur prataph sing road')
+automate.exit()
 
 
 
-input("Press Enter to close the browser ")
-driver.quit()
+
