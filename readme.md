@@ -98,4 +98,5 @@ now define locate_by_Id, locate_by_XPath function in this class
 - locate the button of required webpage using inspect, go to upload and download section
 - click the ```locator.execute(button)``` method to click the button
 
-      
+
+***Refactor the code in OOPs format***
