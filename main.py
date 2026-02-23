@@ -113,11 +113,12 @@ class DownLoadImgAutomation(WebAutomation):
 # book_store_button = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="root"]/div[1]/div/div[2]/div/a[6]')))
 # book_store_button.click()
 
-automate = DownLoadImgAutomation(URL='https://demoqa.com')
-automate.load_page()
-automate.login_form(username='nikhil969',password='Nikhil969rock@')
-automate.fill_form(full_name='Nikhil Singh', email='nikhil@gmail.com',
-                   current_add='nikhil shah bahadur prataph sing road',
-                   permanent_add='nikhil shah bahadur prataph sing road')
-automate.download_image()
-automate.exit()
+if __name__ == '__main__':
+    automate = DownLoadImgAutomation(URL='https://demoqa.com')
+    automate.load_page()
+    automate.login_form(username='nikhil969',password='Nikhil969rock@')
+    automate.fill_form(full_name='Nikhil Singh', email='nikhil@gmail.com',
+                    current_add='nikhil shah bahadur prataph sing road',
+                    permanent_add='nikhil shah bahadur prataph sing road')
+    automate.download_image()
+    automate.exit()
