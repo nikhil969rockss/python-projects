@@ -67,13 +67,13 @@ class App:
         entry.grid(row=row, column=1, pady=5)
         return entry
 
-    # 🧵 Thread Starter
+    #  Thread Starter
     def start_thread(self):
         thread = Thread(target=self.run_automation)
         thread.daemon = True
         thread.start()
 
-    # 🚀 Actual Automation Logic
+    #  Actual Automation Logic
     def run_automation(self):
         self.submit_btn.config(state="disabled")
         self.status_label.config(text="Status: Running...", fg="orange")
