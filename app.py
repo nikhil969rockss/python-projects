@@ -1,8 +1,10 @@
 from flask import Flask
-from flask import render_template, request
+from flask import render_template, request, flash
 from dotenv import load_dotenv
 from db.database import db
 import os
+from datetime import datetime
+from sqlalchemy.exc import IntegrityError, OperationalError
 
 from models.form import Form
 
@@ -34,9 +36,33 @@ def home_page():
        last_name = request.form['last_name']
        email = request.form['email']
        date = request.form['date']
+       date_f = datetime.strptime(date,'%Y-%m-%d')
        occupation = request.form['occupation']
 
-    return render_template("index.html")
+       form = Form(first_name=first_name,
+                   last_name=last_name,
+                   email=email,
+                   date=date_f,
+                   occupation=occupation)
+       
+       db.session.add(form)
+       print(email, first_name)
+       try:  
+           db.session.commit()
+           
+           flash('Your Form has been submitted', 'success')
+       except IntegrityError as e:
+            db.session.rollback()
+            flash(f'{email} is already registered','error')
+            print(e)
+
+       except OperationalError as e :
+           print(e)
+            
+            
+        
+
+    return render_template("index.html",)
 
 
 if __name__ == '__main__':

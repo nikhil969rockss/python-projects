@@ -179,6 +179,18 @@
         >
           Submit Application
         </button>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+          {% if messages %}
+            {% for category,message in messages %}
+              {% if category=='error' %}
+                <p class="text-sm text-red-400 font-semibold p-2 rounded-lg bg-red-200">⚠️{{message}}</p>
+              {% endif %}
+              {% if category =='success' %}
+                <p class="text-sm text-green-500 font-semibold p-2 rounded-lg bg-green-100">{{message}}</p>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
       </fieldset>
     </form>
   </div>
