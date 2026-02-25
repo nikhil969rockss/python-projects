@@ -17,7 +17,7 @@
       method="POST"
     >
     {% csrf_token %}
-    
+
       <fieldset class="flex flex-col gap-6">
         <legend class="text-lg font-semibold text-green-700 bg-green-50 px-3 py-1 rounded-md w-fit mb-4">
           Employee Details
@@ -181,8 +181,21 @@
         >
           Submit Application
         </button>
-        
-         
+      {% if messages %}
+            {% for message in messages %}
+                <div class="px-4 py-3 rounded-lg mb-4 font-medium
+                {% if message.tags %}
+                    {% if 'success' in message.tags %}
+                        bg-green-100 text-green-800 border border-green-400
+                    {% elif 'error' in message.tags %}
+                        bg-red-100 text-red-800 border border-red-400
+                    {% endif %}
+                {% endif %}
+            ">
+                {{ message }}
+                </div>
+            {% endfor %}
+     {% endif %}  
         
       </fieldset>
     </form>
