@@ -3,6 +3,7 @@ from .forms import ApplicationForm
 from .models import Form
 from django.contrib import messages
 from django.db.utils import IntegrityError
+from django.core.mail import EmailMessage
 
 # Create your views here.
 def home(request):
@@ -21,7 +22,12 @@ def home(request):
                                     email=email,
                                     date=date,
                                     occupation=occupation)
-
+                
+                message_body = f"Thank you for submitting you application {first_name} \nwe will contact you soon"
+                email = EmailMessage(subject='Form submission confirmation',
+                                     body=message_body,
+                                     to=[email])
+                email.send()
                 messages.success(request, "Form Submitted Successfully")
                 redirect('home')
             except IntegrityError as I:
