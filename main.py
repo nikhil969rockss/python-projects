@@ -49,9 +49,6 @@ class AgeCalculator(QWidget):
         self.output_label.setText(f"Age of {user_name} is {age} years old")
 
 
-
-
-
 app = QApplication(sys.argv)
 age_calculator = AgeCalculator()
 age_calculator.show()
