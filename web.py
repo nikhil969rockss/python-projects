@@ -15,7 +15,7 @@ def add_todo():
     st.session_state['todo-input'] = ""
 
 st.title("My Todo Web App")
-st.subheader("This todo app was developed by Nikhil-R")
+st.subheader("This todo app was developed by Nikhil-R",)
 st.write("This is a minimal todo app to organise your day")
 
 for index,todo in enumerate(all_todos):
