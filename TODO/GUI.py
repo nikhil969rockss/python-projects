@@ -1,6 +1,11 @@
 import FreeSimpleGUI as fsg
 import time
 import functions
+import os
+
+if not os.path.exists("todos.txt"):
+    with open("todos.txt","w") as file:
+        pass
 
 fsg.theme("BlueMono")
 
@@ -28,7 +33,7 @@ layout = [
           [clock_label],
           [input_label, ],
           [input_box, add_button],
-          [todos_box, edit_button, complete_button]               ,
+          [todos_box, edit_button, complete_button],
           [exit_button]
           ]
 
@@ -60,8 +65,11 @@ while True:
 
 
         case 'todos-box':
-            selected_todo = values['todos-box'][0]
-            window['todo-input'].update(value=selected_todo)
+            try:
+                selected_todo = values['todos-box'][0]
+                window['todo-input'].update(value=selected_todo)
+            except IndexError:
+                pass
 
         case 'Edit':
             try:
@@ -105,5 +113,8 @@ while True:
             break
         case fsg.WIN_CLOSED :
             break
+
+
 window.close()
+
 
