@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather-API</title>
+</head>
+<body>
+<h1>This is Website creating Using Flask</h1>
+<p>Welcome to our Weather API</p>
+<h2> To ge the temperature of the station in the exact date place the following URL</h2>
+<h4>The URL: <code>
+        http://127.0.0.1:5000/api/v1/< station_code >/< YY-MM-DD > <br>
+    (eg: http://127.0.0.1:5000/api/v1/10/1990-05-14
+
+</code></h4>
+<h2> To ge the temperature of the station for all years</h2>
+<h4>The URL: <code>
+        http://127.0.0.1:5000/api/v1/< station_code > <br>
+    (eg: http://127.0.0.1:5000/api/v1/10
+
+</code></h4>
+<h2> To ge the temperature of the station for all a particular year</h2>
+<h4>The URL: <code>
+        http://127.0.0.1:5000/api/v1/yearly/< YY-MM-DD > <br>
+    (eg: http://127.0.0.1:5000/api/v1/yearly/2000
+
+</code></h4>
+<p><b>Note: Please use available station id and date in (YY-MM-DD) format
+    (eg:1983-08-05)
+</b></p>
+<p>
+    {{data|safe}}
+</p>
+</body>
+</html>
