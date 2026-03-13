@@ -1,8 +1,7 @@
 import os
 from dotenv import load_dotenv
-from langchain_core.agents import AgentActionMessageLog
 
-from langchain_core.messages import  HumanMessage,AIMessage
+from langchain_core.messages import  HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -34,9 +33,6 @@ def show_task():
         for task in tasks:
             all_tasks.append(task.content)
     return all_tasks
-
-
-
 
 
 tools = [add_task, show_task]
