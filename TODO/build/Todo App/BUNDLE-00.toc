@@ -1,0 +1,3 @@
+([('Todo App',
+   '/Users/jarvis/Desktop/PythonProject/Todo/dist/Todo App',
+   'EXECUTABLE')],)
